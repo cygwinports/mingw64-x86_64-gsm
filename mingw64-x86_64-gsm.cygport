@@ -1,0 +1,41 @@
+CROSS_HOST="x86_64-w64-mingw32"
+inherit cross
+
+NAME="mingw64-x86_64-gsm"
+VERSION=1.0.13
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="GSM 06.10 speech compression for Win64 toolchain"
+DESCRIPTION="A C library implementation of the European GSM 06.10 provisional
+standard for full-rate speech transcoding, prI-ETS 300 036, which uses
+RPE/LTP (residual pulse excitation/long term prediction) coding at 13
+kbit/s."
+HOMEPAGE="http://kbs.cs.tu-berlin.de/~jutta/toast.html"
+#SRC_URI="http://kbs.cs.tu-berlin.de/~jutta/gsm/gsm-${VERSION}.tar.gz"
+SRC_URI="mirror://gentoo/gsm-${VERSION}.tar.gz"
+SRC_DIR="gsm-${VERSION%.*}-pl${VERSION##*.}"
+PATCH_URI="mirror://portage/media-sound/gsm/files/gsm-1.0.12-shared.patch
+           mirror://portage/media-sound/gsm/files/gsm-1.0.12-memcpy.patch
+           mirror://portage/media-sound/gsm/files/gsm-1.0.12-64bit.patch
+           1.0.13-shared-libgsm.patch"
+
+src_compile() {
+	lndirs
+	cd ${B}
+	cygmake -j1 \
+		CC="${CC}" \
+		CCFLAGS="-c ${CFLAGS} -ansi -pedantic -DNeedFunctionPrototypes=1" \
+		LD="${CC}" \
+		LFLAGS="${LDFLAGS}" \
+		LIBGSMSO="\$(LIB)/libgsm-1.dll" \
+		TOAST=  UNTOAST=  TCAT=
+}
+
+src_install() {
+	cd ${B}
+	dobin lib/*.dll
+	dolib lib/*.a
+
+	includeinto gsm
+	doinclude inc/gsm.h
+}

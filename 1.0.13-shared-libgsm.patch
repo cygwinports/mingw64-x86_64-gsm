@@ -1,0 +1,13 @@
+--- origsrc/gsm-1.0-pl13/Makefile	2009-04-05 12:33:32.281250000 -0500
++++ src/gsm-1.0-pl13/Makefile	2009-04-05 12:44:53.921875000 -0500
+@@ -323,9 +323,7 @@ install:	toastinstall gsminstall
+ # The basic API: libgsm
+ 
+ $(LIBGSMSO):	$(LIB) $(SHARED_GSM_OBJECTS)
+-		$(LD) -o $@.1.0.12 -shared -Xlinker -soname -Xlinker libgsm.so.1 $(SHARED_GSM_OBJECTS) -lc
+-		ln -fs libgsm.so.1.0.12 lib/libgsm.so.1
+-		ln -fs libgsm.so.1.0.12 lib/libgsm.so
++		$(LD) $(LFLAGS) -o $@ -shared -Wl,--enable-auto-image-base -Wl,--out-implib,$(LIB)/libgsm.dll.a $(SHARED_GSM_OBJECTS)
+ 
+ $(LIBGSM):	$(LIB) $(STATIC_GSM_OBJECTS)
+ 		-rm $(RMFLAGS) $(LIBGSM)
