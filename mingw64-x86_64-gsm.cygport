@@ -3,7 +3,7 @@ inherit cross
 
 NAME="mingw64-x86_64-gsm"
 VERSION=1.0.13
-RELEASE=1
+RELEASE=2
 CATEGORY="Devel"
 SUMMARY="GSM 06.10 speech compression for Win64 toolchain"
 DESCRIPTION="A C library implementation of the European GSM 06.10 provisional
@@ -14,10 +14,12 @@ HOMEPAGE="http://kbs.cs.tu-berlin.de/~jutta/toast.html"
 #SRC_URI="http://kbs.cs.tu-berlin.de/~jutta/gsm/gsm-${VERSION}.tar.gz"
 SRC_URI="mirror://gentoo/gsm-${VERSION}.tar.gz"
 SRC_DIR="gsm-${VERSION%.*}-pl${VERSION##*.}"
-PATCH_URI="mirror://portage/media-sound/gsm/files/gsm-1.0.12-shared.patch
-           mirror://portage/media-sound/gsm/files/gsm-1.0.12-memcpy.patch
-           mirror://portage/media-sound/gsm/files/gsm-1.0.12-64bit.patch
-           1.0.13-shared-libgsm.patch"
+PATCH_URI="
+	http://pkgs.fedoraproject.org/cgit/gsm.git/plain/gsm-makefile.patch
+	http://pkgs.fedoraproject.org/cgit/gsm.git/plain/gsm-warnings.patch
+	http://pkgs.fedoraproject.org/cgit/gsm.git/plain/gsm-64bit.patch
+	1.0.13-shared-libgsm.patch
+"
 
 src_compile() {
 	lndirs
@@ -38,4 +40,5 @@ src_install() {
 
 	includeinto gsm
 	doinclude inc/gsm.h
+	dosym gsm/gsm.h ${CROSS_INCLUDEDIR}/gsm.h
 }

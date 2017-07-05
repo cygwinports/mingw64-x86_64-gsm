@@ -3,11 +3,11 @@
 @@ -323,9 +323,7 @@ install:	toastinstall gsminstall
  # The basic API: libgsm
  
- $(LIBGSMSO):	$(LIB) $(SHARED_GSM_OBJECTS)
--		$(LD) -o $@.1.0.12 -shared -Xlinker -soname -Xlinker libgsm.so.1 $(SHARED_GSM_OBJECTS) -lc
--		ln -fs libgsm.so.1.0.12 lib/libgsm.so.1
--		ln -fs libgsm.so.1.0.12 lib/libgsm.so
-+		$(LD) $(LFLAGS) -o $@ -shared -Wl,--enable-auto-image-base -Wl,--out-implib,$(LIB)/libgsm.dll.a $(SHARED_GSM_OBJECTS)
+ $(LIBGSMSO): $(LIB) $(GSM_OBJECTS)
+-			$(LD) -o $@.1.0.12 -shared -Xlinker -soname -Xlinker libgsm.so.1 $(GSM_OBJECTS) -lc
+-			ln -fs libgsm.so.1.0.12 lib/libgsm.so.1
+-			ln -fs libgsm.so.1.0.12 lib/libgsm.so
++		$(LD) $(LFLAGS) -o $@ -shared -Wl,--enable-auto-image-base -Wl,--out-implib,$(LIB)/libgsm.dll.a $(GSM_OBJECTS)
  
- $(LIBGSM):	$(LIB) $(STATIC_GSM_OBJECTS)
+ $(LIBGSM):	$(LIB) $(GSM_OBJECTS)
  		-rm $(RMFLAGS) $(LIBGSM)
